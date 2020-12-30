@@ -3,8 +3,12 @@ import styles from "../styles/Home.module.css";
 import useSWR from "swr";
 import Link from "next/link";
 
-function Home({ data }) {
+function Home() {
+  const { data, error } = useSWR("/api/people", (url) =>
+    fetch(url).then((res) => res.json())
+  );
   if (!data) return <div>Loading...</div>;
+  if (error) return <div>Error</div>;
 
   return (
     <div className={styles.container}>
@@ -27,15 +31,15 @@ function Home({ data }) {
   );
 }
 
-export async function getStaticProps() {
-  const res = await fetch("http://localhost:3000/api/people");
-  const data = await res.json();
+// export async function getStaticProps() {
+//   const res = await fetch("http://localhost:3000/api/people");
+//   const data = await res.json();
 
-  return {
-    props: {
-      data,
-    },
-  };
-}
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
 
 export default Home;
